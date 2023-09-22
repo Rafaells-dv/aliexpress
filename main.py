@@ -1,3 +1,4 @@
+import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
@@ -21,14 +22,23 @@ navegador.find_element(By.XPATH, '//*[@id="root"]/div[1]/div/div[2]/div/div[2]/d
 navegador.find_element(By.XPATH, '//*[@id="root"]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/input[2]').send_keys(preco_max)
 navegador.find_element(By.CLASS_NAME, 'priceInput--ok--2apR64x').click()
 
+while len(navegador.find_elements(By.CLASS_NAME, 'verhicles-new-content')) < 1:
+    time.sleep(1)
+
 lista_elementos = navegador.find_elements(By.CLASS_NAME, 'manhattan--container--1lP57Ag')
 produtos = []
 for elemento in lista_elementos:
     nome = elemento.find_element(By.CLASS_NAME, 'cards--title--2rMisuY').text
     preco = elemento.find_element(By.CLASS_NAME, 'manhattan--price-sale--1CCSZfK').text
+    try:
+        elemento_vendas = elemento.find_element(By.CLASS_NAME, 'manhattan--tradeContainer--33O19sx')
+        n_vendas = elemento_vendas.find_element(By.CLASS_NAME, 'manhattan--trade--2PeJIEB').text
+    except:
+        n_vendas = '0 vendas'
     link = elemento.get_attribute('href')
-    produtos.append([nome, preco, link])
 
-tabela_produtos = pd.DataFrame(produtos, columns=['Produto', 'Preço', 'Link'])
+    produtos.append([nome, preco, n_vendas, link])
+
+tabela_produtos = pd.DataFrame(produtos, columns=['Produto', 'Preço', 'Numero de Vendas', 'Link'])
 hoje = date.today()
 tabela_produtos.to_excel('{}.xlsx'.format(hoje))
