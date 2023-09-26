@@ -20,7 +20,7 @@ def webscraping():
 
     navegador.find_element(by=By.ID, value="search-key").send_keys(item.get(), Keys.ENTER)
 
-    if int(preco_max.get()) == 1:
+    if int(preco_max.get()) == 0:
         pass
     else:
         navegador.find_element(By.XPATH,
@@ -33,6 +33,13 @@ def webscraping():
 
         while len(navegador.find_elements(By.CLASS_NAME, 'priceInput--ok--2apR64x')) >= 1:
             time.sleep(1)
+    x = 0
+    while True:
+        x += 1
+        navegador.execute_script(f"window.scrollBy(0, 300)")
+        time.sleep(0.5)
+        if x > 100:
+            break
 
     lista_elementos = navegador.find_elements(By.CLASS_NAME, 'manhattan--container--1lP57Ag')
     if len(lista_elementos) < 1:
@@ -55,7 +62,8 @@ def webscraping():
     tabela_produtos = pd.DataFrame(produtos, columns=['Produto', 'Preço', 'Numero de Vendas', 'Link'])
     pasta = filedialog.askdirectory()
     hoje = date.today().strftime("%d-%m-%Y")
-    tabela_produtos.to_excel(f'{pasta}\%s.xlsx' % hoje, 'w')
+    nome_arquivo = f'{item.get()}-{hoje}'
+    tabela_produtos.to_excel(f'{pasta}\%s.xlsx' % nome_arquivo, 'w')
 
 
 tela = Tk()
