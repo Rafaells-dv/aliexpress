@@ -10,7 +10,7 @@ Coleta de Dados: O programa permite coletar informações de produtos do AliExpr
 
 Filtragem de Preço: Você pode definir a faixa de preço do produto, porém o site do Aliexpress pode não encontrar produtos com preço filtrado.
 
-Exportação de Dados: Os dados coletados são exportados para um arquivo Escel para posterior análise ou integração com outros sistemas.
+Exportação de Dados: Os dados coletados são exportados para um arquivo Excel para posterior análise ou integração com outros sistemas.
 
 Requisitos
 
